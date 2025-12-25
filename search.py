@@ -55,11 +55,16 @@ def parse_vehicle_xml(root):
     return vehicle
 
 
-def parse_vehicle_xmls(file_paths):
+def parse_vehicle_xmls(vehicles_directory):
+    xml_files = []
+    for f in vehicles_directory.rglob("*.xml"):
+        xml_files.append(f)
+
+
     vehicles = []
     current_index = 0
-    total_files = len(file_paths)
-    for file_path in file_paths:
+    total_files = len(xml_files)
+    for file_path in xml_files:
         tree = ET.parse(file_path)
         root = tree.getroot()
         if root.tag != "vehicle":
@@ -135,6 +140,12 @@ def print_vehicle_info(vehicle):
 def get_short_vehicle_info(vehicle):
     return f"{vehicle.get_full_name()} - Type: {vehicle.type}, Store Category: {vehicle.store_category}"
 
+def get_categories(vehicle_list):
+    categories = set()
+    for vehicle in vehicle_list:
+        categories.add(vehicle.store_category)
+    return categories
+
 def main():
     # Parse command line arguments for vehicle name
     # vehicle_name = "LIZARD Pickup 2017"  # Placeholder for command line argument
@@ -153,7 +164,7 @@ def main():
         xml_files.append(f.relative_to(vehicles_directory))
 
     # Create list of vehicle data from XML files
-    vehicle_list = parse_vehicle_xmls([vehicles_directory / f for f in xml_files])
+    vehicle_list = parse_vehicle_xmls(vehicles_directory)
 
     # Search vehicle list for specified vehicle
     vehicle = find_vehicle_by_full_name(vehicle_list, vehicle_name)
