@@ -50,9 +50,12 @@ class AttachableVehiclesTableWidget(QTableWidget):
         
         self.resizeColumnsToContents()
 
-        self.sortItems(0, Qt.SortOrder.AscendingOrder)
         self.setSelectionMode(QTableWidget.SelectionMode.NoSelection)
         self.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+
+        # Couldn't get sorting to work after clearing and repopulating the table
+        # A lot of cells are missing values after the sort
+        # self.sortItems(0, Qt.SortOrder.AscendingOrder)
 
 class MainWindow(QMainWindow):
     def __init__(self):
